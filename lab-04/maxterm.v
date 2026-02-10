@@ -3,6 +3,6 @@ module maxterm (
     output Y
 );
 
-assign Y = ;// Enter your equation here
+assign Y = (~B | ~D) & (~A | ~D) & (B | C | D);
 
 endmodule
