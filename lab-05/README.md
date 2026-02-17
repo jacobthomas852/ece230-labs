@@ -22,6 +22,6 @@ the constraints file maps your inputs and outputs to real pins on the FPGA.
 ### 1 - Explain the role of the Top Level file.
 
 ### 2 - Explain the function of the Constraints file.
-
+The constraints file allows us to tell Vivado how the switches and leds are routed to the FPGA board. For example, the constraints file is used to tell Vivado that switch SW0 is connected to pin V17 on the FPGA board.
 ### 3 - Was the selection of Minterm and Maxterm correct for each circuit? What would you have chosen?
-
+The selection of Minterm and Maxterm was correct for both circuit A and circuit B. We used the truth tables to make K-maps with maxterms for circuit A, and minterms for circuit B. The Product-of-Sums for the maxterms and the Sum-of-Product for the minterms were used to implement the logic equations for the circuits in Verilog. These equations were correct for demonstrating the combined design to the lab TAs. By choosing maxterms for circuit A and minterms for circuit B, we were able to make concise functions since the K-map groupings were large. The truth table for circuit A has many more 0s than 1s for outputs, so choosing maxterms makes sense to create bigger groups. The truth table for circuit B has equal amounts of outputs 1s and 0s, but the minterms allow for bigger K-map groupings which resulted in a more efficient and smaller equation.
