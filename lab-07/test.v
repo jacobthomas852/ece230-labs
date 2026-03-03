@@ -114,6 +114,6 @@ module test();
         else
             $display("All Testcases Passed!");
         
-        #50 $finish;
+//        #50 $finish;
     end
 endmodule
