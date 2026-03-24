@@ -14,10 +14,18 @@ In this lab you have learned about multiplexers and demultiplexers.
 ## Names
 
 ## Summary
+In this lab, we implemented a multiplexer and a demultiplexer. The multiplexer simulates an internet valve that allows one user,
+out of four users, to pass through to the output. The four users are the CEO, you, Fred, and Jill. 
+The demultiplexer is used to determine where the user's data is output.
+There are four output locations including the library, fire department, school, and the rib shack.
+The multiplexer and demultiplexer were then connected together in the top.v file. The output of the mux is the input of the demux.
+After implementing our combined design, we demonstrated the functionality to the lab TA using an FPGA board.
 
 ## Lab Questions
 
 ### In plain English describe the function and use of a multiplexer.
+A multiplexer takes multiple inputs and routes them to one output. A selector is used to determine which of the inputs will be
+sent to the output.
 
 ### In plain English describe the function and use of a demultiplexer.
 A demultiplexer is used to route one input to one of several outputs.

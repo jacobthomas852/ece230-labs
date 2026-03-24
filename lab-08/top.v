@@ -51,4 +51,3 @@ module top(
         .enable(enable),
         .data_out(led[15:0])
     );
-endmodule
