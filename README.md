@@ -1,2 +1,2 @@
 # ECE230 Labs
-This is the lab repository for team 17 in ECE230L.
+This is the lab repository for team 9 in ECE230L.
