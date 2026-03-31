@@ -5,7 +5,7 @@ module d_ff(
 );
     //initial state
     initial begin
-        q = 0;
+        q <= 0;
     end
 
     //moving the value of d into q

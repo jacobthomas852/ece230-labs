@@ -6,6 +6,7 @@ module jk_ff(
 
     // making a d input 
     wire d_input;
+    assign q_n = ~q;
     assign d_input = (j & q_n) | (~k & q);
 
     d_ff nested_d_ff (
