@@ -1,17 +1,18 @@
-module top (
-    input btnU,
-    input btnC,
+module top(
+    input btnC, btnU,
     output [6:0] led
 );
-    ripple_counter rc_inst (
-        .Clk(btnC),
-        .Reset(btnU),
-        .Q(led[2:0])
+    ripple_counter rc(
+        .clk(btnC),
+        .q(led[2:0]),
+        .reset(btnU)
     );
-    
-    mod_divider md_inst (
-        .Clk(btnC),
-        .Reset(btnU),
-        .Q(led[6:3])
+
+    modulo_counter mc(
+        .clk(btnC),
+        .reset(btnU),
+        .state(led[5:3]),
+        .mod_out(led[6])
     );
+
 endmodule

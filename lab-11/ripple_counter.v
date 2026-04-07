@@ -1,29 +1,30 @@
-module ripple_counter (
-    input Clk,
-    input Reset,
-    output [2:0] Q
+module ripple_counter(
+    input clk, reset,
+    output [2:0] q
+
 );
-    wire [2:0] intermediates;
-    t_flipflop tff0 (
-        .Clk(Clk),
-        .T(1'b1),
-        .Reset(Reset),
-        .Q(intermediates[0])
-    );
+    wire [2:0] inter_wire;
+    wire nq0, nq1, nq2;
     
-    t_flipflop tff1 (
-        .Clk(intermediates[0]),
-        .T(1'b1),
-        .Reset(Reset),
-        .Q(intermediates[1])
+    t_ff t0(
+        .clk(clk),
+        .t(0'b1),
+        .Reset(reset),
+        .q(inter_wire[0])
     );
-    
-    t_flipflop tff2 (
-        .Clk(intermediates[1]),
-        .T(1'b1),
-        .Reset(Reset),
-        .Q(intermediates[2])
+
+    t_ff t1(
+        .clk(inter_wire[0]),
+        .t(0'b1),
+        .Reset(reset),
+        .q(inter_wire[1])
     );
-    
-    assign Q = intermediates;
+
+    t_ff t2(
+        .clk(inter_wire[1]),
+        .t(0'b1),
+        .Reset(reset),
+        .q(inter_wire[2])
+    );
+    assign q = inter_wire;
 endmodule

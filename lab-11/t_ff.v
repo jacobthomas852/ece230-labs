@@ -1,5 +1,5 @@
 module t_ff(
-    input clk, t,
+    input clk, t, Reset,
     output reg q,
     output q_n //not q
 );
@@ -9,9 +9,12 @@ module t_ff(
     initial begin
         q <= 0;
     end
-
+    
     always @(posedge clk) begin
-        if (t)
-            q <= ~q;
+        if (Reset)
+            q <= 0;
+        else
+            if (t)
+                q <= ~q;;
     end
 endmodule
