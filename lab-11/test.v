@@ -1,78 +1,71 @@
+`timescale 1ns/1ps
+
 module test();
-    reg [3:0] sw;
-    reg btnC;
-    wire [5:0] led;
+
+    reg clk;
+    reg rst;
+    wire [2:0] mc_state;
+    wire [2:0] rc_state;
+    assign rc_out = rc_state[2];
+    wire mc_out;
+
+    integer fail = 0;
+    integer i;
 
     top uut(
-        .sw(sw),
-        .led(led),
-        .btnC(btnC)
+        .btnC(clk),
+        .btnU(rst),
+        .led({mc_out, mc_state, rc_state})
     );
-
-    task automatic toggle_clock;
-        begin
-            #1 btnC = 1;
-            #1 btnC = 0;
-        end
-    endtask
-
-    task automatic set_check_dff(input D, input ExpectedQ);
-        begin
-            sw[0] = D;
-            toggle_clock();
-            if (led[0] !== ExpectedQ || led[1] === ExpectedQ) begin
-                $display("D FF test failed: expected Q = %b, ~Q = %b got %b | %b", ExpectedQ, ~ExpectedQ, led[0], led[1]);
-                $finish;
-            end
-        end
-    endtask
-
-    task automatic set_check_jkff(input J, input K, input ExpectedQ);
-        begin
-            sw[1] = J;
-            sw[2] = K;
-            toggle_clock();
-            if (led[2] !== ExpectedQ || led[3] === ExpectedQ) begin
-                $display("JK FF test failed: expected Q = %b, ~Q = %b got %b | %b", ExpectedQ, ~ExpectedQ, led[2], led[3]);
-                $finish;
-            end
-        end
-    endtask
-
-    task automatic set_check_tff(input T, input ExpectedQ);
-        begin
-            sw[3] = T;
-            toggle_clock();
-            if (led[4] !== ExpectedQ || led[5] === ExpectedQ) begin
-                $display("T FF test failed: expected Q = %b, ~Q = %b got %b | %b", ExpectedQ, ~ExpectedQ, led[4], led[5]);
-                $finish;
-            end
-        end
-    endtask
 
     initial begin
         $dumpvars(0,test);
-        btnC = 0;
-        sw = 4'b0;
-        toggle_clock();
+        clk = 0;
+        rst = 1;
+        #10;
+        rst = 0;
+        #10;
+
+        //Test 1: Check if modulo counter flips state after 7 clock cycles
+        for (i = 0; i < 14; i = i + 1) begin
+            #1 clk = ~clk;
+        end
+        #5;
+        // We should have toggled the /6 modulo counter
+        if (mc_out !== 1'b1) begin
+            fail = 1;
+            $display("Test 1: Failed to trigger the modulo counter");
+        end
+
+        //Test 2: After additional 1 clock cycle, check if the ring counter resets after counting down from 7 to 0
+        for (i = 0; i < 2; i = i + 1) begin
+            #1 clk = ~clk;
+        end
+        #5;
+        // We should have toggled the /8 ring counter
+        if (rc_state[2] !== 1'b0) begin
+            fail = 1;
+            $display("Test 2: Failed to toggle final bit of the ring counter output off");
+        end
+ 
+        //Test 3: After additional 7 clock cycles, check if modulo counter has reset
+        for (i = 0; i < 14; i = i + 1) begin
+            #1 clk = ~clk;
+        end
+        #5;
+        // We should have toggled the /6 modulo counter
+        if (mc_out !== 1'b0) begin
+            fail = 1;
+            $display("Test 3: Reset logic in modulo counter is wrong");
+        end
         
-        set_check_dff(0, 0);
-        set_check_dff(1, 1);
-
-        set_check_jkff(0, 1, 0);
-        set_check_jkff(0, 0, 0);
-        set_check_jkff(1, 0, 1);
-        set_check_jkff(0, 0, 1);
-        set_check_jkff(1, 1, 0);
-        set_check_jkff(1, 1, 1);
-
-        set_check_tff(0, 0);
-        set_check_tff(1, 1);
-        set_check_tff(0, 1);
-        set_check_tff(1, 0);
-    
-        $display("Test passed!!");
-        $finish;
+        if (!fail)
+            $display("All Testcases Passed!");
+        else 
+            $error("Failing Testcases!");
+        
+        #5; $finish;
+        
     end
 
 endmodule

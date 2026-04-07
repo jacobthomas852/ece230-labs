@@ -1,15 +1,15 @@
-# Sequential Circuits: Latches
+# Lab 11 - Counters and Dividers
 
-In this lab, you’ve learned about edge sensitive circuits and explored some of the power therein.
+In this lab, we learned how to make clock dividers from two types of counters.
 
 ## Rubric
 
-|Item|Description|Value|
-|-|-|-|
-|Summary Answers|Your writings about what you learned in this lab.|25%|
-|Question 1|Your answers to the question|25%|
-|Question 2|Your answers to the question|25%|
-|Question 3|Your answers to the question|25%|
+| Item | Description | Value |
+| ---- | ----------- | ----- |
+| Summary Answers | Your writings about what you learned in this lab. | 25% |
+| Question 1 | Your answers to the question | 25% |
+| Question 2 | Your answers to the question | 25% |
+| Question 3 | Your answers to the question | 25% |
 
 ## Names
 
@@ -17,9 +17,9 @@ In this lab, you’ve learned about edge sensitive circuits and explored some of
 
 ## Lab Questions
 
-### What is difference between edge and level sensitive circuits?
+### 1 - Why does the Modulo Counter actually divide clocks by 2 * Count?
 
-### Why is it important to declare initial state?
+### 2 - Why does the ring counter's output go to all 1s on the first clock cycle?
 
-### What do edge sensitive circuits let us build?
+### 3 - What width of ring counter would you use to get to an output of ~1KHz?
 
