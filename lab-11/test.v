@@ -9,6 +9,10 @@ module test();
     assign rc_out = rc_state[2];
     wire mc_out;
 
+<<<<<<< HEAD
+=======
+    integer fail = 0;
+>>>>>>> main
     integer i;
 
     top uut(
@@ -25,6 +29,7 @@ module test();
         rst = 0;
         #10;
 
+<<<<<<< HEAD
         for (i = 0; i < 14; i = i + 1) begin
             #1 clk = ~clk;
         end
@@ -51,6 +56,48 @@ module test();
         if (mc_out !== 1'b0) begin
             $display("Reset logic in modulo counter is wrong");
         end
+=======
+        //Test 1: Check if modulo counter flips state after 7 clock cycles
+        for (i = 0; i < 14; i = i + 1) begin
+            #1 clk = ~clk;
+        end
+        #5;
+        // We should have toggled the /6 modulo counter
+        if (mc_out !== 1'b1) begin
+            fail = 1;
+            $display("Test 1: Failed to trigger the modulo counter");
+        end
+
+        //Test 2: After additional 1 clock cycle, check if the ring counter resets after counting down from 7 to 0
+        for (i = 0; i < 2; i = i + 1) begin
+            #1 clk = ~clk;
+        end
+        #5;
+        // We should have toggled the /8 ring counter
+        if (rc_state[2] !== 1'b0) begin
+            fail = 1;
+            $display("Test 2: Failed to toggle final bit of the ring counter output off");
+        end
+ 
+        //Test 3: After additional 7 clock cycles, check if modulo counter has reset
+        for (i = 0; i < 14; i = i + 1) begin
+            #1 clk = ~clk;
+        end
+        #5;
+        // We should have toggled the /6 modulo counter
+        if (mc_out !== 1'b0) begin
+            fail = 1;
+            $display("Test 3: Reset logic in modulo counter is wrong");
+        end
+        
+        if (!fail)
+            $display("All Testcases Passed!");
+        else 
+            $error("Failing Testcases!");
+        
+        #5; $finish;
+        
+>>>>>>> main
     end
 
 endmodule
