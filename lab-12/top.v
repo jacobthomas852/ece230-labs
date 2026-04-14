@@ -9,7 +9,7 @@ module top(
     one_hot oh(
         .w(sw),
         .clk(btnC),
-        .reset(btnu),
+        .reset(btnU),
         .z(led[0]),
         .Astate(led[2]),
         .Bstate(led[3]),
