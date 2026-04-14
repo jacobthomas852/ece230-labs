@@ -3,44 +3,54 @@ module one_hot(
     input w,
     input clk,
     input reset,
-    output z
+    output z, Astate, Bstate, Cstate, Dstate, Estate
 );
     wire Anext, Bnext, Cnext, Dnext, Enext;
-    wire Astate, Bstate, Cstate, Dstate, Estate;
+//    wire Astate, Bstate, Cstate, Dstate, Estate;
 
     dff Adff(
         .Default(1'b1),
-        .D(reset ? 1'b1 : Anext), //goes to 1 on reset
+        .D(Anext), //goes to 1 on reset
         .clk(clk),
-        .Q(Astate)
+        .Q(Astate),
+         .reset(reset)
+
     );
 
     dff Bdff(
         .Default(1'b0),
-        .D(reset ? 1'b0 : Bnext), // goes to 0 on reset, same for the rest
+        .D(Bnext), // goes to 0 on reset, same for the rest
         .clk(clk),
-        .Q(Bstate)
+        .Q(Bstate),
+        .reset(reset)
+
     );
 
     dff Cdff(
         .Default(1'b0),
-        .D(reset ? 1'b0 : Cnext),
+        .D(Cnext),
         .clk(clk),
-        .Q(Cstate)
+        .Q(Cstate),
+        .reset(reset)
+
     );
 
     dff Ddff(
         .Default(1'b0),
-        .D(reset ? 1'b0 : Dnext),
+        .D(Dnext),
         .clk(clk),
-        .Q(Dstate)
+        .Q(Dstate),
+        .reset(reset)
+
     );
 
     dff Edff(
         .Default(1'b0),
-        .D(reset ? 1'b0 : Enext),
+        .D(Enext),
         .clk(clk),
-        .Q(Estate)
+        .Q(Estate),
+        .reset(reset)
+
     );
 
     assign z = Cstate | Estate;
