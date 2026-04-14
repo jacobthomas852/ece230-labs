@@ -11,30 +11,49 @@ module binary(
     wire [2:0] Next;
 
     dff zero(
-        .D(reset ? 1'b0 : Next[0]),
+        .D(Next[0]),
+        .Default(1'b0),
         .clk(clk),
-        .Q(State[0])
+        .Q(State[0]),
+        .reset(reset)
     );
 
     dff one(
-        .D(reset ? 1'b0 : Next[1]),
+        .D(Next[1]),
+        .Default(1'b0),
         .clk(clk),
-        .Q(State[1])
+        .Q(State[1]),
+        .reset(reset)
     );
 
     dff two(
-        .D(reset ? 1'b0 : Next[2]),
+        .D(Next[2]),
+        .Default(1'b0),
         .clk(clk),
-        .Q(State[2])
+        .Q(State[2]),
+        .reset(reset)
     );
+    
+    assign z = (State[1] & ~State[0]) | State[2]; //(~State[2] & State[1] & ~State[0]) | (State[2] & ~State[1] & ~State[0]); //C or E
 
-    assign z = (~State[2] & State[1] & ~State[0]) | (State[2] & ~State[1] & ~State[0]); //C or E
+//    assign Next[0] = (w & ~State[2] & ~(State[1] & State[0]) ) |  
+//                     (~w & ~(State[0] ^ State[1]) ); 
 
-    assign Next[0] = (w & ~State[2] & ~(State[1] & State[0]) ) |  
-                     (~w & ~(State[0] ^ State[1]) ); 
-
-    assign Next[1] = (w & ~State[2] & ~(State[1] & State[0])) |
-                     (~w & (State[1] ^ State[0])); // same as ^
+//    assign Next[1] = (w & ~State[2] & ~(State[1] & State[0])) |
+//                     (~w & (State[1] ^ State[0])); 
+                     
+//    assign Next[2] = w & (State[2] | (State[1] & State[0])); // only true when E or D
+    assign Next[0] = (w & ~State[2] & ~State[0]) | 
+                     (~w & ~State[1] & ~State[0]) | 
+                     (w & ~State[2] & ~State[1]) |
+                     (~w & State[1] & State[0]);
+                     
+    assign Next[1] = (w & ~State[2] & ~State[1]) | 
+                     (~State[1] & State[0]) |
+                     (State[1] & ~State[0]) ;
+                     //                     (~State[2] & ~State[1] & State[0]) |
+//                     (~State[2] & State[1] & ~State[0]) ;
+                     
     assign Next[2] = w & (State[2] | (State[1] & State[0])); // only true when E or D
 
 
